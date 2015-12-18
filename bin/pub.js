@@ -19,7 +19,7 @@ function send(args) {
 
 function start(args) {
   args = minimist(args, {
-    string: ['hostname', 'username', 'password', 'key', 'cert', 'message'],
+    string: ['hostname', 'username', 'password', 'key', 'cert', 'ca', 'message'],
     integer: ['port', 'qos'],
     boolean: ['stdin', 'retain', 'help', 'insecure'],
     alias: {
@@ -33,8 +33,9 @@ function start(args) {
       username: 'u',
       password: 'P',
       stdin: 's',
-      protocol: 'C',
-      help: 'H'
+      protocol: ['C', 'l'],
+      help: 'H',
+      ca: 'cafile'
     },
     default: {
       host: 'localhost',
@@ -49,11 +50,11 @@ function start(args) {
   }
 
   if (args.key) {
-    args.key = fs.readFileSync(key);
+    args.key = fs.readFileSync(args.key);
   }
 
   if (args.cert) {
-    args.cert = fs.readFileSync(cert);
+    args.cert = fs.readFileSync(args.cert);
   }
 
   if (args.ca) {
@@ -62,6 +63,13 @@ function start(args) {
 
   if (args.key && args.cert && !args.protocol) {
     args.protocol = 'mqtts'
+  }
+
+  if (args.port){
+    if (typeof args.port !== 'number') {
+      console.warn('# Port: number expected, \'%s\' was given.', typeof args.port);
+      return;
+    }
   }
 
   if (args['will-topic']) {
@@ -77,7 +85,7 @@ function start(args) {
   }
 
   args.topic = (args.topic || args._.shift()).toString();
-  args.message = (args.message || args._.shift()).toString() || '';
+  args.message = (args.message || args._.shift() || '').toString() || '';
 
   if (!args.topic) {
     console.error('missing topic\n');

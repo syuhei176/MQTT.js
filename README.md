@@ -1,7 +1,7 @@
 ![mqtt.js](https://raw.githubusercontent.com/mqttjs/MQTT.js/137ee0e3940c1f01049a30248c70f24dc6e6f829/MQTT.js.png)
 =======
 
-[![Build Status](https://travis-ci.org/mqttjs/MQTT.js.png)](https://travis-ci.org/mqttjs/MQTT.js)
+[![Build Status](https://travis-ci.org/mqttjs/MQTT.js.svg)](https://travis-ci.org/mqttjs/MQTT.js)
 
 [![NPM](https://nodei.co/npm/mqtt.png)](https://nodei.co/npm/mqtt/)
 [![NPM](https://nodei.co/npm-dl/mqtt.png)](https://nodei.co/npm/mqtt/)
@@ -14,7 +14,7 @@ in JavaScript for node.js and the browser.
 * [Example](#example)
 * [Command Line Tools](#cli)
 * [API](#api)
-* [Browserify](#browserify)
+* [Browser](#browser)
 * [Contributing](#contributing)
 * [License](#license)
 
@@ -170,7 +170,7 @@ The arguments are:
 the `connect` event. Typically a `net.Socket`.
 * `options` is the client connection options (see: the [connect packet](https://github.com/mcollina/mqtt-packet#connect)). Defaults:
   * `keepalive`: `10` seconds, set to `0` to disable
-  * `clientId`: `'mqttjs'_ + crypto.randomBytes(16).toString('hex')`
+  * `clientId`: `'mqttjs_' + Math.random().toString(16).substr(2, 8)`
   * `protocolId`: `'MQTT'`
   * `protocolVersion`: `4`
   * `clean`: `true`, set to false to receive QoS 1 and 2 messages while
@@ -212,9 +212,12 @@ version 1.3 and 1.4 works fine without those.
 
 #### Event `'connect'`
 
-`function() {}`
+`function(connack) {}`
 
-Emitted on successful (re)connection (i.e. connack rc=0).
+Emitted on successful (re)connection (i.e. connack rc=0). 
+* `connack` received connack packet. When `clean` connection option is `false` and server has a previous session 
+for `clientId` connection option, then `connack.sessionPresent` flag is `true`. When that is the case, 
+you may rely on stored session and prefer not to send subscribe commands for the client.
 
 #### Event `'reconnect'`
 
@@ -351,8 +354,11 @@ The callback is called when the packet has been removed.
 
 Closes the Store.
 
+<a name="browser"></a>
+## Browser
+
 <a name="browserify"></a>
-## Browserify
+### Browserify
 
 In order to use MQTT.js as a browserify module you can either require it in your browserify bundles or build it as a stand alone module. The exported module is AMD/CommonJs compatible and it will add an object in the global space.
 
@@ -361,6 +367,19 @@ npm install -g browserify // install browserify
 cd node_modules/mqtt
 npm install . // install dev dependencies
 browserify mqtt.js -s mqtt > browserMqtt.js // require mqtt in your client-side app
+```
+
+<a name="webpack"></a>
+### Webpack
+
+Just like browserify, export MQTT.js as library. The exported module would be `var mqtt = xxx` and it will add an object in the global space. You could also export module in other [formats (AMD/CommonJS/others)](http://webpack.github.io/docs/configuration.html#output-librarytarget) by setting **output.libraryTarget** in webpack configuration.
+
+```javascript
+npm install -g webpack // install webpack
+
+cd node_modules/mqtt
+npm install . // install dev dependencies
+webpack mqtt.js ./browserMqtt.js --output-library mqtt
 ```
 
 you can then use mqtt.js in the browser with the same api than node's one.
@@ -405,6 +424,7 @@ MQTT.js is only possible due to the excellent work of the following contributors
 <table><tbody>
 <tr><th align="left">Adam Rudd</th><td><a href="https://github.com/adamvr">GitHub/adamvr</a></td><td><a href="http://twitter.com/adam_vr">Twitter/@adam_vr</a></td></tr>
 <tr><th align="left">Matteo Collina</th><td><a href="https://github.com/mcollina">GitHub/mcollina</a></td><td><a href="http://twitter.com/matteocollina">Twitter/@matteocollina</a></td></tr>
+<tr><th align="left">Maxime Agor</th><td><a href="https://github.com/4rzael">GitHub/4rzael</a></td><td><a href="http://twitter.com/4rzael">Twitter/@4rzael</a></td></tr>
 </tbody></table>
 
 <a name="license"></a>
