@@ -1,10 +1,8 @@
 {
   "name": "mqtt-for-milkcocoa",
-  "description": "A library for the MQTT protocol",
+  "description": "A library for the MQTT protocol for Milkcocoa",
   "version": "1.6.1",
   "contributors": [
-    "Adam Rudd <adamvrr@gmail.com>",
-    "Matteo Collina <matteo.collina@gmail.com> (https://github.com/mcollina)"
   ],
   "keywords": [
     "mqtt",
@@ -15,7 +13,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mqttjs/MQTT.js.git"
+    "url": "git://github.com/syuhei176/MQTT.js.git"
   },
   "main": "mqtt.js",
   "scripts": {
@@ -47,7 +45,7 @@
     "inherits": "^2.0.1",
     "minimist": "^1.1.0",
     "mqtt-connection": "^2.0.0",
-    "mqtt-packet": "syuhei176/mqtt-packet.git",
+    "mqtt-packet-for-milkcocoa": "*",
     "readable-stream": "~1.0.2",
     "reinterval": "^1.0.1",
     "websocket-stream": "^2.0.2",
