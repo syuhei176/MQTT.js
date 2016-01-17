@@ -1,7 +1,7 @@
 {
   "name": "mqtt-for-milkcocoa",
   "description": "A library for the MQTT protocol for Milkcocoa",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "contributors": [
   ],
   "keywords": [
